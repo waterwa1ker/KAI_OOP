@@ -12,7 +12,6 @@ public class Ring extends JPanel {
     private boolean VISION = true;
 
     public Ring (Point point, int r, Color c) {
-        System.out.println("\nвызов конструктора 1\n");
         setLayout(null);
         setOpaque(false);
         if ((point.getX()+r) >= 1200) { r = 1200 - point.getX();}
@@ -33,7 +32,7 @@ public class Ring extends JPanel {
         Two = new Circle(new Point(point.getX(),point.getY()),r*2/3, Color.BLACK);
         this.point = point;
         D=r*2;
-        System.out.println("Объект Ring создан");
+        System.out.println("Кольцо создано");
     }
 
     public void MoveTo(int dx, int dy) {
@@ -42,10 +41,8 @@ public class Ring extends JPanel {
         this.repaint();
     }
 
-    public void Show(boolean VISION) {
-        this.VISION= VISION;
-        setVisible(this.VISION);
-        this.VISION = true;
+    public void Show(Color color) {
+        this.color = color;
         this.repaint();
     }
 
