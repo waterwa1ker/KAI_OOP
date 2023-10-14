@@ -6,13 +6,13 @@ import java.awt.*;
 public class Start {
 
     private JFrame frame = new JFrame("Лабораторная работа №1");
-
     private JButton backButton = new JButton("Назад");
     private JButton lineButton = new JButton("Линия");
     private JButton circleButton = new JButton("Окружность");
     private JButton rectangleButton = new JButton("Прямоугольник");
     private JButton triangleButton = new JButton("Треугольник");
     private JButton ringButton = new JButton("Кольцо");
+    private JButton complexButton = new JButton("Вписанная окружность");
     private JButton createButton = new JButton("Создать");
     private JButton moveButton = new JButton("Переместить");
     private JButton deleteButton = new JButton("Удалить");
@@ -34,8 +34,11 @@ public class Start {
     private Triangle [] triangles = null;
     private JPanel ring = null;
     private JPanel[] rings = null;
+    private JPanel complex = null;
+    private JPanel[] complexArray = null;
     private int numbut, ch1, ch2, ch3, ch4, ch5 = 0;
-    private boolean liveVision = false, circleVision = false, rectangleVision = false, triangleVision = false, ringVision = false;
+    private boolean liveVision = false, circleVision = false, rectangleVision = false, triangleVision = false, ringVision = false,
+    complexVision = false;
 
     private Start() {
         //создаем основное окно
@@ -65,24 +68,27 @@ public class Start {
         p.add(rectangleButton);
         p.add(triangleButton);
         p.add(ringButton);
+        p.add(complexButton);
 
         //кнопка "Назад"
         backButton.addActionListener(e -> {
-            if (numbut == 1 || numbut == 2 || numbut == 3 || numbut == 4 || numbut == 5) {
+            if (numbut == 1 || numbut == 2 || numbut == 3 || numbut == 4 || numbut == 5 || numbut == 6) {
                 southPanel.removeAll();
                 southPanel.add(lineButton);
                 southPanel.add(circleButton);
                 southPanel.add(rectangleButton);
                 southPanel.add(triangleButton);
                 southPanel.add(ringButton);
+                southPanel.add(complexButton);
             }
-            if (numbut == 11 || numbut == 12 || numbut == 13 || numbut == 14 || numbut == 15) {
+            if (numbut == 11 || numbut == 12 || numbut == 13 || numbut == 14 || numbut == 15 || numbut == 16) {
 
                 if (numbut == 11) { southPanel.add(turnButton); numbut = 1;}
                 if (numbut == 12) { southPanel.add(changeRadiusButton); numbut = 2;}
                 if (numbut == 13) { southPanel.add(changeSizeButton);numbut = 3;}
                 if (numbut == 14) { southPanel.add(changeSizeButton);numbut = 4;}
                 if (numbut == 15) { southPanel.add(changeRadiusButton);numbut = 5;}
+                if (numbut == 16) { southPanel.add(changeRadiusButton); numbut = 6;}
                 southPanel.add(arrayButton);
             }
             southPanel.revalidate();
@@ -159,6 +165,19 @@ public class Start {
             southPanel.revalidate();
             southPanel.repaint();
             numbut = 5;
+        });
+        complexButton.addActionListener(e -> {
+            southPanel.removeAll();
+            southPanel.add(backButton);
+            southPanel.add(createButton);
+            southPanel.add(moveButton);
+            southPanel.add(deleteButton);
+            southPanel.add(changeRadiusButton);
+            southPanel.add(setVisibleButton);
+            southPanel.add(arrayButton);
+            southPanel.revalidate();
+            southPanel.repaint();
+            numbut = 6;
         });
 
         //кнопка "Создать"
@@ -333,6 +352,38 @@ public class Start {
                     JOptionPane.showMessageDialog(frame, "Массив Колец уже создан");
                 }
             }
+            else if (numbut == 6){
+                if (complex == null) {
+                    complexVision = true;
+                    complex = new ComplexFigure(new Point(ch1, ch2), ch3, Color.magenta);
+                    ((ComplexFigure) complex).Show(Color.MAGENTA);
+                    centerPanel.add(complex, BorderLayout.CENTER);
+                    centerPanel.revalidate();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Сложная фигура уже нарисована");
+                }
+            }
+            else if (numbut == 16){
+                if (complexArray == null) {
+                    complexArray = new ComplexFigure[10];
+                    complexVision = true;
+                    for (int i=0; i<10; i++) {
+                        ch1 = (int) (Math.random() * 300);
+                        ch2 = (int) (Math.random() * 300);
+                        ch3 = (int) (Math.random() * 300);
+                        complexArray[i] = new ComplexFigure(new Point(ch1, ch2), ch3, Color.MAGENTA);
+                        System.out.println("Complex №" + (i+1));
+                        ((ComplexFigure)complexArray[i]).Show(Color.MAGENTA);
+                        centerPanel.add(complexArray[i], BorderLayout.CENTER);
+                        centerPanel.validate();
+                        centerPanel.repaint();
+                    }
+                    centerPanel.revalidate();
+                }
+                else {
+                    JOptionPane.showMessageDialog(frame, "Массив сложных фигур уже создан");
+                }
+            }
             ch1 = ch2 = ch3 = ch4 = ch5 = 0;
         });
         //кнопка "Переместить"
@@ -459,6 +510,31 @@ public class Start {
                 }
                 else {
                     JOptionPane.showMessageDialog(frame, "Массив Колец не найден");
+                }
+            }
+            else if (numbut == 6) {
+                if (complex != null) {
+                    ((ComplexFigure) complex).MoveTo(ch1, ch2);
+                    ((ComplexFigure) complex).Show(Color.MAGENTA);
+                    centerPanel.repaint();
+                    centerPanel.revalidate();
+                }
+                else {
+                    JOptionPane.showMessageDialog(frame, "Сложная фигура не найдена");
+                }
+            }
+            else if (numbut == 16) {
+                if (complexArray != null) {
+                    for (int i=0; i<10; i++) {
+                        ((ComplexFigure)complexArray[i]).MoveTo(ch1, ch2);
+                        ((ComplexFigure)complexArray[i]).Show(Color.MAGENTA);
+                        centerPanel.repaint();
+                        System.out.println("перемещение Сложной фигуры №" + (i+1));
+                    }
+                    centerPanel.revalidate();
+                }
+                else {
+                    JOptionPane.showMessageDialog(frame, "Массив сложных фигур не найден");
                 }
             }
             ch1 = ch2 = 0;
@@ -595,6 +671,32 @@ public class Start {
                     JOptionPane.showMessageDialog(frame, "Массив колец не найден");
                 }
             }
+            else if (numbut == 6){
+                if (complex != null) {
+                    centerPanel.remove(complex);
+                    ((ComplexFigure) complex).Show(Color.WHITE);
+                    complex = null;
+                    centerPanel.revalidate();
+                    centerPanel.repaint();
+                }
+                else {
+                    JOptionPane.showMessageDialog(frame, "Сложная фигура не найдена");
+                }
+            }
+            else if (numbut == 16) {
+                if (complexArray != null) {
+                    for (int i=0; i<10; i++) {
+                        centerPanel.remove(complexArray[i]);
+                        ((ComplexFigure)complexArray[i]).Show(Color.WHITE);
+                    }
+                    complexArray = null;
+                    centerPanel.revalidate();
+                    centerPanel.repaint();
+                }
+                else {
+                    JOptionPane.showMessageDialog(frame, "Массив сложных фигур не найден");
+                }
+            }
         });
 
         //кнопка "Повернуть на 45"
@@ -673,6 +775,31 @@ public class Start {
                     centerPanel.repaint();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Массив Колец не создан");
+                }
+            }
+            else if (numbut == 6) {
+                ch1 = 50 + (int) (Math.random() * 150);
+                if (complex != null) {
+                    ((ComplexFigure) complex).changeRadius(ch1);
+                    ((ComplexFigure) complex).Show(Color.MAGENTA);
+                    ch1 = 0;
+                    centerPanel.revalidate();
+                    centerPanel.repaint();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Сложная фигура не найдена");
+                }
+            }
+            else if (numbut == 16) {
+                if (complexArray != null) {
+                    for (int i = 0; i < 10; i++) {
+                        ch1 = 50 + (int) (Math.random() * 150);
+                        ((ComplexFigure)complexArray[i]).changeRadius(ch1);
+                        ((ComplexFigure)complexArray[i]).Show(Color.MAGENTA);
+                    }
+                    centerPanel.revalidate();
+                    centerPanel.repaint();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Массив сложных фигур не создан");
                 }
             }
 
@@ -911,6 +1038,42 @@ public class Start {
                     JOptionPane.showMessageDialog(frame, "Массив колец не найден");
                 }
             }
+            else if (numbut == 6) {
+                if (complex != null) {
+                    System.out.println("Видимость: " + complexVision);
+                    if (!complexVision) {
+                        ((ComplexFigure) complex).Show(Color.MAGENTA);
+                    }
+                    else {
+                        ((ComplexFigure) complex).Show(Color.WHITE);
+                    }
+                    complexVision = !complexVision;
+                    centerPanel.revalidate(); centerPanel.repaint();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Сложная фигура не найдена");
+                }
+            }
+            else if (numbut == 16) {
+                if (complexArray != null) {
+                    Color arrayColor;
+                    if (!complexVision){
+                        arrayColor = Color.MAGENTA;
+                    }
+                    else{
+                        arrayColor = Color.WHITE;
+                    }
+                    System.out.println("Видимость: " + complexVision);
+                    for (int i=0; i<10; i++) {
+                        ((ComplexFigure)complexArray[i]).Show(arrayColor);
+                        centerPanel.repaint();
+                    }
+                    complexVision = !complexVision;
+                    centerPanel.revalidate();
+                }
+                else {
+                    JOptionPane.showMessageDialog(frame, "Массив сложных фигур не найден");
+                }
+            }
         });
 
         //кнопка "Массив"
@@ -940,6 +1103,10 @@ public class Start {
             if (numbut == 5 ) {
                 southPanel.add(changeRadiusButton); numbut = 15;
                 JOptionPane.showMessageDialog(frame, "Следующие действия будут выполнены для массива колец");
+            }
+            if (numbut == 6) {
+                southPanel.add(changeRadiusButton); numbut = 16;
+                JOptionPane.showMessageDialog(frame, "Следующие действия будет выполнены для массивы сложных фигур");
             }
             southPanel.revalidate();
             southPanel.repaint();
